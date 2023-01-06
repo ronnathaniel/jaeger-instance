@@ -39,19 +39,18 @@ if __name__ == '__main__':
         agent_host_name=endpoint,
         agent_port=6831,
     )
-    # jaeger_exporter = JaegerExporter(
-    #     collector_endpoint='localhost'
-    # )
     provider = TracerProvider(resource=resource)
-    processor = BatchSpanProcessor(jaeger_exporter)
+    processor = BatchSpanProcessor(
+        jaeger_exporter,
+        max_queue_size=60,
+        max_export_batch_size=6,
+    )
     provider.add_span_processor(processor)
     trace.set_tracer_provider(provider)
     tracer = trace.get_tracer(__name__)
 
-
-    ####
+    # Instrumented Function
     create_trace = lambda: None
-
 
     instrumented_func = wrap_span([
         tracer.start_as_current_span('MySpan-' + str(i))
@@ -60,4 +59,5 @@ if __name__ == '__main__':
 
     for i in range(100000):
         instrumented_func()
-        print(i, '.')
+        if i and not i % 100:
+            print(i, 'Sent')
