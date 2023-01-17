@@ -42,8 +42,8 @@ if __name__ == '__main__':
     provider = TracerProvider(resource=resource)
     processor = BatchSpanProcessor(
         jaeger_exporter,
-        max_queue_size=60,
-        max_export_batch_size=6,
+        max_queue_size=10,
+        max_export_batch_size=1,
     )
     provider.add_span_processor(processor)
     trace.set_tracer_provider(provider)
@@ -59,5 +59,6 @@ if __name__ == '__main__':
 
     for i in range(100000):
         instrumented_func()
-        if i and not i % 100:
-            print(i, 'Sent')
+        # if i and not i % 100:
+        print(i, 'Sent')
+
