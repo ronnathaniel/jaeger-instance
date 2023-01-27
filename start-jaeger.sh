@@ -22,7 +22,7 @@ docker run \
   -p 14268:14268 \
   -p 14269:14269 \
   -p 9411:9411 \
-  jaegertracing/all-in-one:${JAEGER_TAG} 
+  jaegertracing/all-in-one:${JAEGER_TAG} \
   --log-level=debug
 
 
